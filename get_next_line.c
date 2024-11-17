@@ -6,7 +6,7 @@
 /*   By: samberna <samberna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 10:39:35 by samberna          #+#    #+#             */
-/*   Updated: 2024/11/17 18:20:12 by samberna         ###   ########.fr       */
+/*   Updated: 2024/11/17 18:33:33 by samberna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,27 +41,29 @@ char	*get_next_line(int fd)
 	n = read(fd, buf + sz, BUFFER_SIZE);
 	while (n > 0)
 	{
+		printf("|n last:%d|\n", n);
 		sz += n;
 		buf = ft_realloc(buf, sz, sz + BUFFER_SIZE);
 		if (!buf)
 			return (NULL);
 		if (ft_getline(buf, sz) > 0)
 		{
-			printf("|HEY: %s|", ft_substr(buf, 0, ft_getline(buf, sz) + 1));
+			printf("|HEY: %s|\n", ft_substr(buf, 0, ft_getline(buf, sz) + 1));
+			printf("|JA: %s|\n", ft_substr(buf, ft_getline(buf, sz) + 1, sz - ft_getline(buf, sz) - 1));
 			//tmp = ft_substr(buf, 0, ft_getline(buf, sz) + 1);
 			m = sz - (ft_getline(buf, sz) + 1);
-			buf = ft_substr(buf, ft_getline(buf, sz) + 1, sz);
-			printf("|yes: %s|", buf);
-			printf("|inner-m last:%d|", m);	
+			buf = ft_substr(buf, ft_getline(buf, sz) + 1, sz - ft_getline(buf, sz) - 1);
+			printf("|yes: %s|\n", buf);
+			printf("|inner-m last:%d|\n", m);	
 			sz = m;
 			//return (tmp);
 		}
 		n = read(fd, buf + sz, BUFFER_SIZE);
-		printf("|n last:%d|", n);
-		if (n == 0)
-			printf("|HEY: %s|", ft_substr(buf, 0, sz));
-			//return (ft_substr(buf, 0, sz));
 	}
+	if (n == 0)
+		printf("|HEY: %s|\n", ft_substr(buf, 0, sz));
+		//return (ft_substr(buf, 0, sz));
+	return (NULL);
 }
 
 int main()
