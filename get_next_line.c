@@ -6,7 +6,7 @@
 /*   By: samberna <samberna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 10:39:35 by samberna          #+#    #+#             */
-/*   Updated: 2024/11/17 18:33:33 by samberna         ###   ########.fr       */
+/*   Updated: 2024/11/17 18:34:50 by samberna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ char	*get_next_line(int fd)
 		}
 		n = read(fd, buf + sz, BUFFER_SIZE);
 	}
-	if (n == 0)
+	if (n == 0 && buf)
 		printf("|HEY: %s|\n", ft_substr(buf, 0, sz));
 		//return (ft_substr(buf, 0, sz));
 	return (NULL);
@@ -79,7 +79,7 @@ int main()
     }
     while ((line = get_next_line(fd)))
     {
-        printf("\nFOUND: %s", line);
+        printf("|FOUND: %s|", line);
         free(line);
     }
     close(fd);
