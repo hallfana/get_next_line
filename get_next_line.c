@@ -3,103 +3,65 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: samberna <samberna@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: samberna <samberna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 10:39:35 by samberna          #+#    #+#             */
-/*   Updated: 2024/11/17 17:15:57 by samberna         ###   ########.fr       */
+/*   Updated: 2024/11/17 18:20:12 by samberna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <stdio.h> // Add this for debug prints
 
-t_gnl	*get_gnl(t_gnl *lst, int fd)
+int ft_getline(char *buf, int sz)
 {
-	t_gnl	*head;
-	t_gnl	*new;
-
-	head = lst;
-	while (lst)
-	{
-		if (lst->fd == fd)
-			return (lst);
-	}
-	new = (t_gnl *)malloc(sizeof(t_gnl));
-	new->fd = fd;
-	new->buf = (char *)malloc(sizeof(char) * BUFFER_SIZE);
-	new->offset = 0;
-	new->next = NULL;
-	if (head)
-	{
-		while (head->next != NULL)
-			head = head->next;
-		head->next = new;
-		return (head->next);
-	}
-	else
-		return (new);
-}
-
-char	*ft_strcat(char *s1, const char *s2)
-{
-	size_t	i;
-	size_t	j;
+	int	i;
 
 	i = 0;
-	j = 0;
-	while (s1[j])
-		j++;
-	while (s2[i])
+	while (buf[i] && i < sz)
 	{
-		s1[j] = s2[i];
-		i++;
-		j++;
-	}
-	s1[j] = '\0';
-	return (s1);
-}
-
-void	ft_bzero(void *s, size_t n)
-{
-	unsigned char	*str;
-	size_t			i;
-
-	if (n == 0)
-		return ;
-	i = 0;
-	str = (unsigned char *)s;
-	while (i < n)
-	{
-		str[i] = 0;
+		if (buf[i] == '\n')
+			return (i);
 		i++;
 	}
-}
-
-char	*ft_read(int fd, char *buf, int sw)
-{
-	char	*tmp_buf;
-	int		n;
-
-	tmp_buf = (char *)malloc(sizeof(char) * sw);
-	n = read(fd, tmp_buf, sw);
-	buf = ft_realloc(buf, ft_strlen(buf), ft_strlen(buf) + n + 1);
-	buf = ft_strcat(buf, tmp_buf);
-	buf[ft_strlen(buf)] = '\0';
-	return (buf);
+	return (-1);
 }
 
 char	*get_next_line(int fd)
 {
 	static char	*buf;
+	static int			sz;
+	static int			n;
+	static int			m;
+	char				*tmp;
 
+	buf = malloc(BUFFER_SIZE);
 	if (!buf)
+		return (NULL);
+	sz = 0;
+	n = read(fd, buf + sz, BUFFER_SIZE);
+	while (n > 0)
 	{
-		buf = malloc(sizeof(char) * (BUFFER_SIZE + 1));
-		ft_bzero(buf, BUFFER_SIZE + 1);
-		buf[BUFFER_SIZE] = '\0';
+		sz += n;
+		buf = ft_realloc(buf, sz, sz + BUFFER_SIZE);
+		if (!buf)
+			return (NULL);
+		if (ft_getline(buf, sz) > 0)
+		{
+			printf("|HEY: %s|", ft_substr(buf, 0, ft_getline(buf, sz) + 1));
+			//tmp = ft_substr(buf, 0, ft_getline(buf, sz) + 1);
+			m = sz - (ft_getline(buf, sz) + 1);
+			buf = ft_substr(buf, ft_getline(buf, sz) + 1, sz);
+			printf("|yes: %s|", buf);
+			printf("|inner-m last:%d|", m);	
+			sz = m;
+			//return (tmp);
+		}
+		n = read(fd, buf + sz, BUFFER_SIZE);
+		printf("|n last:%d|", n);
+		if (n == 0)
+			printf("|HEY: %s|", ft_substr(buf, 0, sz));
+			//return (ft_substr(buf, 0, sz));
 	}
-	buf = ft_read(fd, buf, BUFFER_SIZE);
-	return (buf);
 }
 
 int main()
@@ -113,10 +75,9 @@ int main()
         perror("Error opening file");
         return (1);
     }
-
     while ((line = get_next_line(fd)))
     {
-        printf("FOUND: %s\n\n\n\n", line);
+        printf("\nFOUND: %s", line);
         free(line);
     }
     close(fd);
