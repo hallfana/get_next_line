@@ -6,7 +6,7 @@
 /*   By: samberna <samberna@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 11:00:58 by samberna          #+#    #+#             */
-/*   Updated: 2024/11/17 21:16:30 by samberna         ###   ########.fr       */
+/*   Updated: 2024/11/17 21:45:15 by samberna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,24 @@
 
 void	*ft_realloc(void *old, size_t oldSz, size_t newSz)
 {
-	size_t	i;
-	char	*new;
+    size_t  i;
+    char    *new;
 
-	new = malloc(newSz);
-	if (!new)
-		return (new);
-	i = 0;
-	while (i < oldSz)
-	{
-		((char *)new)[i] = ((char *)old)[i];
-		++i;
-	}
-	free(old);
-	return (new);
+    new = malloc(newSz + 1);
+    if (!new)
+        return (NULL);
+    i = 0;
+    if (old)
+    {
+        while (i < oldSz)
+        {
+            ((char *)new)[i] = ((char *)old)[i];
+            ++i;
+        }
+        free(old);
+    }
+    ((char *)new)[newSz] = '\0';
+    return (new);
 }
 
 char	*ft_substr(char const *s, unsigned int start, size_t len)

@@ -6,7 +6,7 @@
 /*   By: samberna <samberna@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 10:39:35 by samberna          #+#    #+#             */
-/*   Updated: 2024/11/17 21:16:57 by samberna         ###   ########.fr       */
+/*   Updated: 2024/11/17 21:49:02 by samberna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ int	ft_getline(char *buf, int sz)
 {
 	int	i;
 
+	if (!buf)
+		return (-1);
 	i = 0;
 	while (buf[i] && i < sz)
 	{
@@ -47,8 +49,8 @@ char	*ft_extract_line(char **buf, int *sz)
 	i = ft_getline(*buf, *sz);
 	if (i == -1)
 		return (NULL);
-	line = ft_substr(*buf, 0, i);
-	*buf = ft_substr(*buf, i + 1, *sz - i - 1);
+	line = ft_substr(*buf, 0, i + 1);
+	*buf = ft_substr(buf, i + 1, *sz - i - 1);
 	*sz -= i + 1;
 	return (line);
 }
@@ -61,28 +63,31 @@ char	*get_next_line(int fd)
 	char		*line;
 
 	if (fd == 0)
-		return (NULL);
-	n = 1;
-	while (n > 0)
-	{
-		n = ft_read(&buf, &sz, fd);
-		if (n == -1)
-			return (NULL);
-		line = ft_extract_line(&buf, &sz);
-		if (line)
+        return (NULL);
+    line = ft_extract_line(&buf, &sz);
+    if (line)
+        return (line);
+    while (1)
+    {
+        n = ft_read(&buf, &sz, fd);
+        if (n == -1)
+            return (NULL);
+        if (n == 0 && sz == 0)
+            return (NULL);
+		if (n == 0 && sz > 0)
+		{
+			line = ft_substr(buf, 0, sz);
+			sz = 0;
 			return (line);
-	}
-	if (n == 0 && sz > 0)
-	{
-		line = ft_substr(buf, 0, sz);
-		buf = NULL;
-		sz = 0;
-		return (line);
-	}
-	return (NULL);
+		}
+        line = ft_extract_line(&buf, &sz);
+        if (line)
+            return (line);
+    }
+    return (NULL);
 }
 
-/*int main()
+int main()
 {
 	int fd;
 	char *line;
@@ -100,4 +105,4 @@ char	*get_next_line(int fd)
 	}
 	close(fd);
 	return (0);
-}*/
+}
