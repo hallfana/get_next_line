@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: samberna <samberna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: samberna <samberna@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 11:00:58 by samberna          #+#    #+#             */
-/*   Updated: 2024/11/17 17:51:57 by samberna         ###   ########.fr       */
+/*   Updated: 2024/11/17 21:16:30 by samberna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
