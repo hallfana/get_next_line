@@ -6,7 +6,7 @@
 /*   By: samberna <samberna@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 11:00:58 by samberna          #+#    #+#             */
-/*   Updated: 2024/11/17 15:43:26 by samberna         ###   ########.fr       */
+/*   Updated: 2024/11/17 16:58:43 by samberna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,20 +32,20 @@ char	*ft_substr(char const *s, int start, int len)
 	return (str);
 }
 
-char	*ft_strnchr(const char *s, int c, int sw)
+int	ft_strnchr(const char *s, int c, int sw)
 {
 	size_t	i;
 
 	i = 0;
 	if (c == 0)
-		return ((char *)s + ft_strlen((char *)s));
-	while (s[i], i <= sw)
+		return (-1);
+	while (s[i], i < sw)
 	{
 		if (s[i] == (char)c)
-			return ((char *)s + i);
+			return (i);
 		i++;
 	}
-	return (NULL);
+	return (-1);
 }
 
 char	*ft_strjoin(char const *s1, char const *s2)

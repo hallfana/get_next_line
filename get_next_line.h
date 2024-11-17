@@ -6,7 +6,7 @@
 /*   By: samberna <samberna@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 10:40:35 by samberna          #+#    #+#             */
-/*   Updated: 2024/11/17 15:23:44 by samberna         ###   ########.fr       */
+/*   Updated: 2024/11/17 16:48:13 by samberna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ typedef struct s_gnl
 } t_gnl;
 
 char	*get_next_line(int fd);
-char	*ft_strnchr(const char *s, int c, int sw);
+int		ft_strnchr(const char *s, int c, int sw);
 char	*ft_strjoin(char const *s1, char const *s2);
 char	*ft_substr(char const *s, int start, int len);
 int		ft_strlen(const char *s);

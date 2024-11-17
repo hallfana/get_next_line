@@ -6,7 +6,7 @@
 /*   By: samberna <samberna@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 10:39:35 by samberna          #+#    #+#             */
-/*   Updated: 2024/11/17 16:21:28 by samberna         ###   ########.fr       */
+/*   Updated: 2024/11/17 17:15:57 by samberna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,88 +40,66 @@ t_gnl	*get_gnl(t_gnl *lst, int fd)
 		return (new);
 }
 
-t_gnl	*extract(t_gnl	*lst)
+char	*ft_strcat(char *s1, const char *s2)
 {
-	int		i;
-	char	*line;
-	char	*tmp_buf;
-	int		tmp_offset;
+	size_t	i;
+	size_t	j;
 
 	i = 0;
-	while(lst->buf[i] != '\n' && i < lst->offset)
+	j = 0;
+	while (s1[j])
+		j++;
+	while (s2[i])
+	{
+		s1[j] = s2[i];
 		i++;
-	//printf("off=%d\n", lst->offset);
-	line = ft_substr(lst->buf, 0, i + 1);
-	//printf("line=%s\n", line);
-	//printf("i=%d,+1=%c,+2=%c\n", i, lst->buf[i + 1], lst->buf[i + 2]);
-	tmp_buf = ft_substr(lst->buf, i + 1, lst->offset - i);
-	//printf("10\n");
-	tmp_offset = lst->offset - i;
-	//printf("tmp_buf=%s,tmp_offset=%d\n", tmp_buf, tmp_offset);
-	lst->buf = tmp_buf;
-	lst->offset = tmp_offset;
-	lst->line = line;
-	return (lst);
+		j++;
+	}
+	s1[j] = '\0';
+	return (s1);
+}
+
+void	ft_bzero(void *s, size_t n)
+{
+	unsigned char	*str;
+	size_t			i;
+
+	if (n == 0)
+		return ;
+	i = 0;
+	str = (unsigned char *)s;
+	while (i < n)
+	{
+		str[i] = 0;
+		i++;
+	}
+}
+
+char	*ft_read(int fd, char *buf, int sw)
+{
+	char	*tmp_buf;
+	int		n;
+
+	tmp_buf = (char *)malloc(sizeof(char) * sw);
+	n = read(fd, tmp_buf, sw);
+	buf = ft_realloc(buf, ft_strlen(buf), ft_strlen(buf) + n + 1);
+	buf = ft_strcat(buf, tmp_buf);
+	buf[ft_strlen(buf)] = '\0';
+	return (buf);
 }
 
 char	*get_next_line(int fd)
 {
-	//static t_gnl	*datastore;
-	static t_gnl			*lst;
-	int				n;
+	static char	*buf;
 
-	if (!lst)
+	if (!buf)
 	{
-		lst = (t_gnl *)malloc(sizeof(t_gnl));
-		lst->fd = fd;
-		lst->buf = NULL;
-		lst->offset = 0;
-		lst->next = NULL;
-		lst->line = NULL;
+		buf = malloc(sizeof(char) * (BUFFER_SIZE + 1));
+		ft_bzero(buf, BUFFER_SIZE + 1);
+		buf[BUFFER_SIZE] = '\0';
 	}
-	
-	//lst = get_gnl(datastore, fd);
-
-	/*if (!lst || fd <= 0 || BUFFER_SIZE <= 0)
-		return (NULL);
-	if (!lst->buf)
-		lst->buf = malloc(BUFFER_SIZE);
-	printf("BUFFER ONE: %s, offset %d\n", lst->buf, lst->offset);
-	n = read(lst->fd, lst->buf + lst->offset, BUFFER_SIZE);
-	printf("BUFFER TWO: %s, offset %d\n", lst->buf, lst->offset);
-	while (n > 0)
-	{
-		lst->offset += n;
-		printf("buf=%s,off=%d\n", lst->buf, lst->offset);
-		lst->buf = ft_realloc(lst->buf, lst->offset, lst->offset + BUFFER_SIZE);
-		if (ft_strnchr(lst->buf, '\n', lst->offset) != NULL)
-			lst = extract(lst);
-		if (lst->line)
-		{
-			printf("LINE=%s,OFFSET=%d,BUF=%s\n", lst->line, lst->offset, lst->buf);
-			return (lst->line);
-		}
-		if (!lst->buf)
-			return (NULL);
-		n = read(fd, lst->buf + lst->offset, BUFFER_SIZE);
-	}
-    return (NULL);*/
-
-	if (!lst || fd <= 0 || BUFFER_SIZE <= 0)
-		return (NULL);
-	if (!lst->buf)
-		lst->buf = malloc(BUFFER_SIZE);
-	while (1)
-	{
-		if (lst->buf)
-			lst->buf = ft_realloc(lst->buf, lst->offset, lst->offset + BUFFER_SIZE);
-		n = read(lst->fd, lst->buf + lst->offset, BUFFER_SIZE);
-		lst->offset += n;
-		lst = extract(lst);
-		if (lst->line != NULL)
-			return (lst->line);
-	}
-    return (NULL);
+	buf = ft_read(fd, buf, BUFFER_SIZE);
+	return (buf);
 }
 
 int main()
