@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: samberna <samberna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: samberna <samberna@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 11:00:58 by samberna          #+#    #+#             */
-/*   Updated: 2024/11/17 11:07:45 by samberna         ###   ########.fr       */
+/*   Updated: 2024/11/17 15:43:26 by samberna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,6 @@ char	*ft_substr(char const *s, int start, int len)
 
 	if (!s)
 		return (NULL);
-	if (start >= ft_strlen(s))
-	{
-		str = (char *)malloc(sizeof(char));
-		str[0] = '\0';
-		return (str);
-	}
 	str = (char *)malloc(len + 1);
 	if (!str)
 		return (NULL);
@@ -37,15 +31,19 @@ char	*ft_substr(char const *s, int start, int len)
 	str[i] = '\0';
 	return (str);
 }
-char	*ft_strchr(const char *s, int c)
+
+char	*ft_strnchr(const char *s, int c, int sw)
 {
+	size_t	i;
+
+	i = 0;
 	if (c == 0)
-		return ((char *)s + ft_strlen(s));
-	while (*s)
+		return ((char *)s + ft_strlen((char *)s));
+	while (s[i], i <= sw)
 	{
-		if (*s == (char)c)
-			return ((char *)s);
-		s++;
+		if (s[i] == (char)c)
+			return ((char *)s + i);
+		i++;
 	}
 	return (NULL);
 }
@@ -83,4 +81,22 @@ int ft_strlen(const char *s)
 	while (s[i])
 		i++;
 	return (i);
+}
+
+void	*ft_realloc(void *old, size_t oldSz, size_t newSz)
+{
+	size_t	i;
+	char	*new;
+
+	new = malloc(newSz);
+	if (!new)
+		return (new);
+	i = 0;
+	while (i < oldSz)
+	{
+		((char *)new)[i] = ((char *)old)[i];
+		++i;
+	}
+	free(old);
+	return (new);
 }

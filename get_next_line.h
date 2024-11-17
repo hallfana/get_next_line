@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: samberna <samberna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: samberna <samberna@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 10:40:35 by samberna          #+#    #+#             */
-/*   Updated: 2024/11/17 11:13:09 by samberna         ###   ########.fr       */
+/*   Updated: 2024/11/17 15:23:44 by samberna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,24 +18,23 @@
 # include <fcntl.h>
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 32
+#  define BUFFER_SIZE 10
 # endif
 
 typedef struct s_gnl
 {
-	char			*buffer;
-	char			*str;
-	int				fd;
+	char			*buf;
 	int				offset;
-	int				ret;
+	int				fd;
+	char			*line;
 	struct s_gnl	*next;
-}	t_gnl;
+} t_gnl;
 
 char	*get_next_line(int fd);
-
-char	*ft_strchr(const char *s, int c);
+char	*ft_strnchr(const char *s, int c, int sw);
 char	*ft_strjoin(char const *s1, char const *s2);
 char	*ft_substr(char const *s, int start, int len);
 int		ft_strlen(const char *s);
+void	*ft_realloc(void *old, size_t oldSz, size_t newSz);
 
 #endif
