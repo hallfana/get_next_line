@@ -6,7 +6,7 @@
 /*   By: samberna <samberna@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 10:40:35 by samberna          #+#    #+#             */
-/*   Updated: 2024/11/17 20:12:02 by samberna         ###   ########.fr       */
+/*   Updated: 2024/11/17 22:26:29 by samberna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,11 @@
 # endif
 
 char	*get_next_line(int fd);
-int		ft_strnchr(const char *s, int c, int sw);
-char	*ft_strjoin(char const *s1, char const *s2);
+int		ft_getline(char *buf, int sz);
+int		ft_read(char **buf, int *sz, int fd);
+int		ft_extract_line(char **buf, int *sz, char **l);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
-int		ft_strlen(const char *s);
 void	*ft_realloc(void *old, size_t oldSz, size_t newSz);
+char	*free_n_return(char **buf);
 
 #endif
